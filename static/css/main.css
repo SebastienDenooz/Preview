@@ -1,0 +1,46 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+.thumbnail img{
+    height: 80px;
+}
+
+.thumbnails li{
+    height: 200px;
+}
+.thumbnails .caption p {word-wrap:break-word;}
+
+.thumbnails p.aa-preview{
+    text-align: center;
+    font-size: 50px;
+    vertical-align: middle;
+    height: 80px;
+    margin-bottom: -40px;
+    margin-top: 20px;
+}
+
+#search-button{
+    width: 120px;
+}
+#live-preview p {
+    font-size: 45px;
+    line-height: 1.2em;
+}
+#myTabContent{
+    height: 300px;
+}
+
+div.glyph_chart div{
+    width: 30px;
+    height: 80px;
+    background-color: #0088cc;
+}
+
+
+
+
+
+
+
