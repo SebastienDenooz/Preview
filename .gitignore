@@ -35,4 +35,4 @@ nosetests.xml
 .project
 .pydevproject
 
-.idea
+*.db.idea
