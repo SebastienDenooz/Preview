@@ -24,7 +24,7 @@ class Thumbnail(models.Model):
     source = models.IntegerField(_("Source of the cache"))
 
 class File(models.Model):
-    path = models.FilePathField(_("Path"))
+    path = models.TextField(_("Path"))
     sha = models.TextField(_("SHA Sum"))
     name = models.CharField(_("Name"),max_length=255)
     tags = models.ManyToManyField(Tag)

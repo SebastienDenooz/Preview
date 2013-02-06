@@ -6,35 +6,25 @@ import os
 import magic
 import hashlib
 
-
-def processDirectory ( args, dirname, filenames ):
-    for filename in filenames:
-        file_path = (dirname+'/'+filename).replace(settings.FONT_FILE_PATH,"")
-        if isFontFile(dirname+'/'+filename):
-            print dirname+'/'+filename
-            search_file = File.objects.filter(path=file_path)
-            if search_file.count() == 0:
-                sha = hashlib.sha1(open(dirname+'/'+filename,'rb').read()).hexdigest()
-#                thumb_files = Thumbnail.objects.filter(sha=sha)
-#                if thumb_files.count() == 0 :
-#                    thumb_files = CreateThumbnail(dirname+'/'+filename,sha)
-                new_file = File(
-                    path=file_path,
-                    sha=sha,
-                    name=filename,
-                    type=magic.from_file(dirname+'/'+filename, mime=True),
-                )
-                new_file.save()
-#                new_file.thumbnails.add(*thumb_files)
-                print "Add ",sha
-            else:
-                #print "."
-                pass
-
-
 class Command(BaseCommand):
-    #   args = "<all>"
     help = "Register files in the database"
 
     def handle(self, *args, **options):
-        os.path.walk(settings.FONT_FILE_PATH, processDirectory, None )
+
+        newly_indexed = []
+        indexed_files = File.objects.all().values_list('path', flat=True)
+
+        for root, dirs, files in os.walk(settings.FONT_FILE_PATH):
+            for file in files:
+                if isFontFile(root+"/"+file):
+                    path = root.replace(settings.FONT_FILE_PATH,"")+"/"+file
+                    if (path not in indexed_files) and (path not in newly_indexed):
+                        new_file = File(
+                            path=path,
+                                sha=hashlib.sha1(open(root+'/'+file,'rb').read()).hexdigest(),
+                            name=file,
+                            type=magic.from_file(root+'/'+file, mime=True),
+                        )
+                        new_file.save()
+                        newly_indexed.append(path)
+                        print "Add "+path
