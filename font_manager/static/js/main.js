@@ -9,6 +9,9 @@ $(document).ready(function(){
             $("#live-preview").css("font-family","font_preview_pk_"+data[0]["pk"]);
             $("#glyph_chart div").css("font-family","font_preview_pk_"+data[0]["pk"]);
             $("#glyph_chart div p").css("font-family","arial");
+            $("#myTabContent").animate({ scrollTop: 0 }, "slow");
+            $("#myTab li,.tab-pane").removeClass("active");
+            $("#myTab a:first").tab("show");
             if (data[0]["fields"]["thumbnails"].length < 1){
                 $("img.text-thumbnail",modal_box).attr("src","http://fakeimg.pl/800x600/?text=No preview...");
                 $("img.big-thumbnail",modal_box).attr("src","http://fakeimg.pl/400x100/?text=Not yet calculated...");
