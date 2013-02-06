@@ -9,12 +9,16 @@ from django.db.models import Q
 from django.conf import settings
 
 def Index(request):
+    search = None
     if request.GET.get('search'):
         search = request.GET.get('search')
         font_list = File.objects.filter(Q(name__contains=search)|Q(path__contains=search)|Q(type__contains=search)|Q(note__contains=search)|Q(sha__contains=search)).distinct()
+    elif request.GET.get('random'):
+        font_list = File.objects.all().order_by("?")[:50]
     else:
-        search = None
         font_list = File.objects.all().distinct()
+
+
     paginator = Paginator(font_list, settings.PREVIEWS_BY_PAGE)
     page = request.GET.get('page')
     try:
