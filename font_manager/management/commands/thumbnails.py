@@ -4,6 +4,9 @@ from django.conf import settings
 from font_manager.models import File, Thumbnail
 from font_manager.utils import GenerateThumbnailImages,CreateThumbnail
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -38,7 +41,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if len(options) == 0:
-            print "No option given. Read help with ./manage.py help thumbnails"
+            logger.error("No option given. Read help with ./manage.py help thumbnails")
         else:
             file_list = None
             if not options['sha']:
@@ -49,7 +52,7 @@ class Command(BaseCommand):
                 elif options['update']:
                     file_list = File.objects.filter(sha=options["sha"])
                 else:
-                    print "Use --update or --delete with sha option. More infos with ./manage.py help thumbnails"
+                    logger.error("Use --update or --delete with sha option. More infos with ./manage.py help thumbnails")
 
             for file in file_list:
                 thumb_files = Thumbnail.objects.filter(sha=file.sha)
@@ -74,4 +77,4 @@ class Command(BaseCommand):
                     thumb_files = CreateThumbnail(settings.FONT_FILE_PATH+'/'+file.path,file.sha)
                     file.thumbnails.add(*thumb_files)
                     file.save()
-                    print "Add thumb for"+file.sha
+                    logger.info("Add thumb for"+file.sha)

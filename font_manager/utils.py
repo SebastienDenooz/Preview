@@ -4,7 +4,12 @@ import Image, ImageFont, ImageDraw
 from django.conf import settings
 from font_manager.models import Thumbnail
 import string
+import sys
 import math
+import logging
+
+logger = logging.getLogger(__name__)
+
 __author__ = 'sebastien'
 
 FONT_FORMATS = (
@@ -22,9 +27,13 @@ FONT_FORMATS = (
 def isFontFile(path):
 
     DirName, Extension = os.path.splitext(path)
-    Mimetype = magic.from_file(path, mime=True)
+    try:
+        Mimetype = magic.from_file(path, mime=True)
+    except:
+        logger.error("ERROR : %s" % sys.exc_info()[0])
+        return False
 
-    if (Extension,Mimetype) not in FONT_FORMATS:
+    if (Extension, Mimetype) not in FONT_FORMATS:
         return False
     else:
         return True

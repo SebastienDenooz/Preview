@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Django settings for font_viewer project.
 import os
+import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -36,6 +37,8 @@ DATABASES = {
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'America/Chicago'
+
+USE_TZ = True
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -128,6 +131,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'font_manager',
+    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -143,14 +147,30 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
+    'formatters': {
+        'datesimple': {
+            'format': '%(asctime)s - %(levelname)s - %(message)s'
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'log_to_stdout': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'datesimple',
+            'stream': sys.stdout,
+        },
     },
     'loggers': {
+        '': {
+            'handlers': ['log_to_stdout'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
@@ -176,8 +196,8 @@ FONT_FORMATS = (
 THUMBNAIL_FORMAT = (
     # ('name', 'Demo text', 'x','y')
     ('tiny', 'Aa', 80,80),
-    ('big', 'Mes Aïeux mélomane !', 400,100),
-    ('text',"""
+    ('big', u'Mes Aïeux mélomane !', 400, 100),
+    ('text',u"""
 Oui alors écoute moi, je suis mon
 meilleur modèle car en vérité, la vérité,
 il n'y a pas de vérité parce que
@@ -200,5 +220,9 @@ de ton perroquet, c'est
 un très, très gros travail et je ne
 cherche pas ici à mettre un point !
 Ça respire le meuble de Provence, hein ?
-""",800,600)
+""", 800, 600)
 )
+# Time in second
+UPDATE_FREQUENCY = 60*60*24*7
+# Minimum number of files to be indexed during a pass
+MINIMUM_NUMBER_FILES_TO_INDEX = 20000

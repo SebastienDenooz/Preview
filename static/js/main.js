@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $("div.caption a.more_info").click(function(){
+        var modal_box = $('div#font-preview');
         $.get($(this).attr("href"), function(data) {
-            var modal_box = $('div#font-preview');
             $("div.modal-header h1.font-name",modal_box).text(data[0]["fields"]["name"]);
             $("div.modal-header p span.font-sha",modal_box).text(data[0]["fields"]["sha"]);
             $("div.modal-header p span.font-path",modal_box).text(data[0]["fields"]["path"]);
@@ -27,6 +27,14 @@ $(document).ready(function(){
                     }
                 }
             }
+            $("div.modal-header p.tags").html("");
+            console.log("boooom");
+            $.get("/tags/file/"+$(this).data("id"), function(data){
+                data.each(function(key,value){
+                    console.log(key);
+                    console.log(value);
+                });
+            });
             modal_box.modal();
         });
         return false;

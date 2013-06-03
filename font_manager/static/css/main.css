@@ -11,6 +11,8 @@
     height: 200px;
 }
 .thumbnails .caption p {word-wrap:break-word;}
+.thumbnails .caption p.tags_list {text-align: justify;}
+.thumbnails .caption p.tags_list span {margin-right: 5px;}
 
 .thumbnails p.aa-preview{
     text-align: center;
@@ -48,8 +50,11 @@ div#glyph_chart div P{
     border-bottom: 1px #000000 solid;
     margin-bottom: 40px;
 }
+div.modal-header p.tags span.label-info,div.modal-header p.tags i{
+    margin-right: 4px;
+    margin-left: 4px;
+}
 
-
-
-
-
+div.modal-header form#form-add-tag{
+    margin-bottom: 0px;
+}

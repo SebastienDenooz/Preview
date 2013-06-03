@@ -6,7 +6,7 @@
         {% for font in fonts %}
             @font-face {
                 font-family: 'font_preview_pk_{{ font.pk }}';
-                src: url('/download/{{ font.path }}');
+                src: url('/get/{{ font.sha }}');
                 font-weight: normal;
                 font-style: normal;
             }
@@ -25,6 +25,12 @@
                     </div>
                 </form>
                 <p><a href="?random=1" class="btn">Get random page</a></p>
+                <h3>Tag list</h3>
+                <ul>
+                    {% for tag in tags %}
+                        <li><a href="?search={{ tag.name }}" class="label label-info">{{ tag.name }}</a></li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="span10">
                 <ul class="thumbnails">
@@ -40,11 +46,13 @@
                             {% if font.thumbnails.all.count < 1 %}
                                 <img src="http://fakeimg.pl/80x80/?text=No preview" alt="{{ font.name }}" class="aa-image-preview" style="display: none;" />
                             {% endif %}
+
                             <div class="caption">
                                 <p>{{ font.name }}</p>
+                                <p class="tags_list">{% for tag in font.tags.all %}<span class="label label-info">{{ tag.name }}</span>{% endfor %}</p>
                                 <p>
-                                    <a href="/download/{{ font.path }}" class="btn btn-success" title="Download"><i class="icon-download">&nbsp;</i></a>
-                                    <a href="/file/{{ font.pk }}" class="btn pull-right more_info" title="More" ><i class="icon-zoom-in">&nbsp;</i></a>
+                                    <a href="/get/{{ font.sha }}" class="btn btn-success" title="Download"><i class="icon-download">&nbsp;</i></a>
+                                    <a href="/file/{{ font.pk }}" class="btn pull-right more_info" title="More" data-id="{{ font.id }}" ><i class="icon-zoom-in">&nbsp;</i></a>
                                 </p>
                             </div>
                         </div>
@@ -80,6 +88,19 @@
             <h1 class="font-name"></h1>
             <p><strong>Path:</strong>&nbsp;<span class="font-path"></span></p>
             <p><strong>SHA sum:</strong>&nbsp;<span class="font-sha"></span></p>
+            <p class="tags"><i class="icon-tags"></i><a href="#" class="btn btn-mini" id="btn-add-tag"><i class="icon-plus"></i>Add tag</a></p>
+
+            <div class="alert alert-success hidden">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <span class="message_result"></span>
+            </div>
+            <form class="hidden" id="form-add-tag">
+                <div class="input-append">
+                    <input class="span2" id="tag-name" autocomplete="off" data-provide="typeahead" type="text">
+                    <button class="btn" type="button" id="submit-add-tag">Add</button>
+                    <button class="btn btn-link" type="button" id="btn-cancel-add-tag">Close</button>
+                </div>
+            </form>
         </div>
         <div class="modal-body">
             <ul class="nav nav-tabs" id="myTab">

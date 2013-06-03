@@ -24,10 +24,15 @@ class Thumbnail(models.Model):
     source = models.IntegerField(_("Source of the cache"))
 
 class File(models.Model):
-    path = models.TextField(_("Path"))
+    path = models.TextField(_("Path"), unique=True)
     sha = models.TextField(_("SHA Sum"))
     name = models.CharField(_("Name"),max_length=255)
     tags = models.ManyToManyField(Tag)
     type = models.CharField(_("File type"),max_length=255)
     note = models.TextField(_("Notes"))
     thumbnails = models.ManyToManyField(Thumbnail)
+
+class Directory(models.Model):
+    path = models.TextField(_("Path"))
+    status = models.BigIntegerField(_("Status"))
+    last_update = models.DateTimeField(_("Last update"),null=True, blank=True)
